@@ -135,10 +135,6 @@ const MatchDetails = ({ match }) => {
             </tbody>
           </table>
         </div>
-        <div className="mb-4">
-          <h3 className="text-xl font-semibold mb-2">Match Format</h3>
-          <p>{match.matchFormat}</p>
-        </div>
         <ScoreInput handleAddPoint={handleAddPoint} player1={match.player1} player2={match.player2} />
         <div className="mb-4">
           <h3 className="text-xl font-semibold mb-2">Match Status</h3>

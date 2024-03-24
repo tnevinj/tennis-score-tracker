@@ -18,7 +18,7 @@ const NewMatch = () => {
       player1,
       player2,
       tournament,
-      matchFormat
+      matchFormat,
     }
     fetch('/api/matches/new', {
       method: 'POST',
@@ -100,7 +100,7 @@ const NewMatch = () => {
             <option value="short-deuce">Best of 2 + Supertiebreak (Short Deuce)</option>
           </select>
         </div>
-        <div className="flex justify-end">
+       <div className="flex justify-end">
           <button
             type="button"
             onClick={closeModal}

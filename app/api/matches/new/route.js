@@ -6,7 +6,6 @@ export const dynamic = 'force-dynamic'
 
 export async function POST(req, res) {
     const matchData = await req.json()
-    console.log(matchData)
     await connectDB();
     const match = await Match.create(matchData)
 

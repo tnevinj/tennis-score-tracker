@@ -9,10 +9,10 @@ const ScoreInput = ({ player1, player2, handleAddPoint }) => {
       <h2 className="text-xl font-bold mb-4">Enter Scores</h2>
       <div>
           {/* Add point buttons */}
-          <div className="mb-4 space-x-8">
+          <div className="mb-4 md:space-x-8 lg:space-x-8">
             <button
               onClick={() => handleAddPoint('player1')}
-              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md mr-2"
+              className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-md mr-2 mb-6"
             >
               Add Point to {player1}
             </button>
