@@ -1,16 +1,13 @@
-// pages/index.js
-import Head from 'next/head';
 import Link from 'next/link';
+
+export const metadata = {
+  title: 'Tennis Score Tracker',
+  description: 'Track tennis scores easily'
+}
 
 export default function Home() {
   return (
     <div>
-      <Head>
-        <title>Tennis Score Tracker</title>
-        <meta name="description" content="Track tennis scores easily" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
       <main className="flex flex-col items-center justify-center min-h-screen py-8 px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto text-center">
           <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
@@ -20,14 +17,9 @@ export default function Home() {
             Effortlessly track and manage tennis scores with our intuitive app.
           </p>
           <div className="mt-5 sm:mt-8 sm:flex sm:justify-center">
-            <div className="rounded-md shadow">
-              <Link href="/login" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 md:py-4 md:text-lg md:px-10">
-                  Log In
-              </Link>
-            </div>
-            <div className="mt-3 rounded-md shadow sm:mt-0 sm:ml-3">
-              <Link href="/signup" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-blue-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10">
-                  Sign Up
+          <div className="rounded-md shadow">
+              <Link href="/matches" className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-500 hover:bg-blue-600 md:py-4 md:text-lg md:px-10">
+                  Get Started
               </Link>
             </div>
           </div>
