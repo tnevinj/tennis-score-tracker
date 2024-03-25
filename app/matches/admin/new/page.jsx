@@ -3,10 +3,12 @@ import { useState } from 'react';
 import Modal from '@/components/Modal';
 import { useRouter } from 'next/navigation';
 import ErrorMessage from '@/components/ErrorMessage';
+import Loader from '@/components/Loader';
 
 const NewMatch = () => {
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(true);
+  const [isLoading, setIsLoading] = useState(false)
   const [player1, setPlayer1] = useState('');
   const [player2, setPlayer2] = useState('');
   const [tournament, setTournament] = useState('');
@@ -21,6 +23,9 @@ const NewMatch = () => {
       tournament,
       matchFormat,
     }
+
+    setIsLoading(true)
+
     await fetch('/api/matches/new', {
       method: 'POST',
       headers: {
@@ -32,6 +37,7 @@ const NewMatch = () => {
       .then(data => {
         // Handle the response data
         console.log(data);
+        setIsLoading(false)
       })
       .catch(error => {
         // Handle any errors
@@ -44,6 +50,10 @@ const NewMatch = () => {
     setIsOpen(false);
     router.push('/matches');
   };
+
+  if (isLoading) {
+    return <Loader />
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={closeModal} title="Create New Match">
