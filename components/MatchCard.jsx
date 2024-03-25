@@ -106,7 +106,7 @@ const MatchCard = ({ match, admin }) => {
               </tr>
           </tbody>
         </table>
-        <Link href={`/matches/${_id}`}>
+        <Link href={`/matches/admin/${_id}`}>
           <div
             className={`mt-4 text-sm font-semibold ${
               status === 'completed' ? 'text-green-600' : 'text-blue-600'
