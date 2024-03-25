@@ -30,3 +30,11 @@ export async function PUT(req, { params }) {
 
   return NextResponse.json({ match })
 }
+
+export async function DELETE(request, { params }) {
+  await connectDB();
+  const id = params.id
+  await Match.findOneAndDelete({ _id: id });
+
+  return NextResponse.redirect('/matches/admin')
+}

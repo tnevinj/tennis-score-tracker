@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import Modal from '@/components/Modal';
 import { useRouter } from 'next/navigation';
+import ErrorMessage from '@/components/ErrorMessage';
 
 const NewMatch = () => {
   const router = useRouter();
@@ -20,7 +21,7 @@ const NewMatch = () => {
       tournament,
       matchFormat,
     }
-    fetch('/api/matches/new', {
+    await fetch('/api/matches/new', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -35,6 +36,7 @@ const NewMatch = () => {
       .catch(error => {
         // Handle any errors
         console.error('Error:', error);
+        return (<ErrorMessage message={error} />)
       });
   };
 

@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic'
 
 export async function GET() {
   await connectDB();
-  const matches = await Match.find({});
+  const matches = await Match.find({}).sort({ date: -1 });
 
   return NextResponse.json({ matches })
 }

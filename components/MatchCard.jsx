@@ -1,8 +1,30 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
-const MatchCard = ({ match }) => {
+const MatchCard = ({ match, admin }) => {
   const { _id, player1, player2, tournament} = match;
+
+  const handleDelete = async(e) => {
+    e.preventDefault();
+    // Perform form validation and submit logic
+   
+    fetch(`/api/matches/${_id}`, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(match),
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response data
+        console.log(data);
+      })
+      .catch(error => {
+        // Handle any errors
+        console.error('Error:', error);
+      });
+  }
 
   const points = [0, 15, 30, 40, 'A']
 
@@ -93,6 +115,12 @@ const MatchCard = ({ match }) => {
             {status === 'completed' ? 'Completed' : 'In Progress'}
           </div>
         </Link>
+        {admin ? (<button
+          onClick={handleDelete}
+          className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mt-2 rounded"
+        >
+          Delete Match
+        </button>) : null}
       </div>
     
   );

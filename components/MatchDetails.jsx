@@ -8,6 +8,8 @@ const MatchDetails = ({ match }) => {
   
   const points = [0, 15, 30, 40, 'A']
 
+  var last_match = match
+
   const [status,setStatus] = useState(match.status)
   const [gameA, setGameA] = useState(match.game[0])
   const [gameB, setGameB] = useState(match.game[1])
@@ -46,6 +48,10 @@ const MatchDetails = ({ match }) => {
     setSupertieB(match.supertiebreak[1])
   }
 
+  var saveData = (match_data) => {
+    last_match = match_data
+  }
+
   const updateMatch = (updated_match, id) => {
     fetch(`/api/matches/${id}`, {
       method: 'PUT',
@@ -61,6 +67,11 @@ const MatchDetails = ({ match }) => {
     router.push('/matches');
   };
 
+  // const handleUndo = () => {
+  //   updateView(last_match)
+  //   updateMatch(last_match, match._id)
+  // }
+
   const handleAddPoint = (player) => {
     var match_data = {
       status: status,
@@ -75,7 +86,7 @@ const MatchDetails = ({ match }) => {
       supertiebreak: [supertieA, supertieB]
 
     }
-
+    saveData(match_data)
     if (player === 'player1') {
       const updated_match = addPoint1(match_data)
       updateView(updated_match)
@@ -136,6 +147,12 @@ const MatchDetails = ({ match }) => {
           </table>
         </div>
         <ScoreInput handleAddPoint={handleAddPoint} player1={match.player1} player2={match.player2} />
+        {/* <button
+          onClick={handleUndo()}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Undo
+        </button> */}
         <div className="mb-4">
           <h3 className="text-xl font-semibold mb-2">Match Status</h3>
           <p>{status === 'completed' ? 'Completed' : 'In Progress'}</p>
