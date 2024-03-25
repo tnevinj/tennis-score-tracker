@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import Image from 'next/image';
+import imageAsset from '@/app/tsa-amex.png'
 
 export const metadata = {
   title: 'Tennis Score Tracker',
@@ -26,9 +28,9 @@ export default function Home() {
         </div>
 
         <div className="mt-8 max-w-3xl mx-auto text-center">
-          <h2 className="text-2xl font-semibold text-gray-800">
+          {/* <h2 className="text-2xl font-semibold text-gray-800">
             Key Features
-          </h2>
+          </h2> */}
           <div className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <div className="flex flex-col items-center">
               <svg
@@ -52,6 +54,7 @@ export default function Home() {
                 Get real-time updates on match scores as they happen.
               </p>
             </div>
+            <Image src={imageAsset} width={2400} height={1500} alt='tsa-amex'/>
             {/* Add more feature cards */}
           </div>
         </div>
