@@ -24,7 +24,6 @@ const NewMatch = () => {
       matchFormat,
     }
 
-    setIsLoading(true)
 
     await fetch('/api/matches/new', {
       method: 'POST',
@@ -37,7 +36,7 @@ const NewMatch = () => {
       .then(data => {
         // Handle the response data
         console.log(data);
-        setIsLoading(false)
+        closeModal()
       })
       .catch(error => {
         // Handle any errors

@@ -1,13 +1,13 @@
 import connectDB from '@/lib/connectDB';
-import Match from '@/models/Match';
+import Message from '@/models/Message';
 import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic'
 
 export async function POST(req, res) {
-    const matchData = await req.json()
+    const msg = await req.json()
     await connectDB();
-    const match = await Match.create(matchData)
+    const message = await Message.create(msg)
 
-    return NextResponse.json(match)
+    return NextResponse.json(message)
 }

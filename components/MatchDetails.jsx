@@ -8,8 +8,6 @@ const MatchDetails = ({ match }) => {
   
   const points = [0, 15, 30, 40, 'A']
 
-  var last_match = match
-
   const [status,setStatus] = useState(match.status)
   const [gameA, setGameA] = useState(match.game[0])
   const [gameB, setGameB] = useState(match.game[1])
@@ -48,10 +46,6 @@ const MatchDetails = ({ match }) => {
     setSupertieB(match.supertiebreak[1])
   }
 
-  var saveData = (match_data) => {
-    last_match = match_data
-  }
-
   const updateMatch = (updated_match, id) => {
     fetch(`/api/matches/${id}`, {
       method: 'PUT',
@@ -67,11 +61,6 @@ const MatchDetails = ({ match }) => {
     router.push('/matches');
   };
 
-  // const handleUndo = () => {
-  //   updateView(last_match)
-  //   updateMatch(last_match, match._id)
-  // }
-
   const handleAddPoint = (player) => {
     var match_data = {
       status: status,
@@ -86,7 +75,6 @@ const MatchDetails = ({ match }) => {
       supertiebreak: [supertieA, supertieB]
 
     }
-    saveData(match_data)
     if (player === 'player1') {
       const updated_match = addPoint1(match_data)
       updateView(updated_match)

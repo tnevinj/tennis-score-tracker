@@ -5,15 +5,8 @@ import Navbar from '@/components/Navbar';
 import useMatches from '@/hooks/useMatches';
 import Loader from '@/components/Loader';
 import ErrorMessage from '@/components/ErrorMessage';
-import { initGA, logPageView } from '@/lib/gtag';
-
 
 export default function MatchList() {
-
-  useEffect(() => {
-    initGA();
-    logPageView();
-  }, []);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const openModal = () => {
