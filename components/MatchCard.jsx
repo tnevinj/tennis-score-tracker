@@ -49,21 +49,21 @@ const MatchCard = ({ match, admin }) => {
   const updateView = (match) => {
     setStatus(match.status)
     setGameA(match.game[0])
-    setGameB(match.game[-1])
+    setGameB(match.game[1])
     setSet1A(match.set1[0])
-    setSet1B(match.set1[-1])
+    setSet1B(match.set1[1])
     setSet2A(match.set2[0])
-    setSet2B(match.set2[-1])
+    setSet2B(match.set2[1])
     setSet3A(match.set3[0])
-    setSet3B(match.set3[-1])
+    setSet3B(match.set3[1])
     setTiebreak1A(match.tiebreak1[0])
-    setTiebreak1B(match.tiebreak1[-1])
+    setTiebreak1B(match.tiebreak1[1])
     setTiebreak2A(match.tiebreak2[0])
-    setTiebreak2B(match.tiebreak2[-1])
+    setTiebreak2B(match.tiebreak2[1])
     setTiebreak3A(match.tiebreak3[0])
-    setTiebreak3B(match.tiebreak3[-1])
+    setTiebreak3B(match.tiebreak3[1])
     setSupertieA(match.supertiebreak[0])
-    setSupertieB(match.supertiebreak[-1])
+    setSupertieB(match.supertiebreak[1])
   }
 
   useEffect(() => {
@@ -84,7 +84,7 @@ const MatchCard = ({ match, admin }) => {
           <tbody>
               <tr className="border-t border-gray-200">
                 <td className="px-4 py-2 font-semibold">{player1}</td>
-                {status === 'completed' ? null : (<td className="px-1 py-2">{points[gameA]}</td>)}
+                <td className="px-1 py-2">{points[gameA]}</td>
                 <td className="px-1 py-2">{set1A}</td>
                 {(tiebreak1A+tiebreak1B)>0 ? (<td className="px-1 py-2">({tiebreak1A})</td>) : null}
                 {(set2A+set2B)>0 ? (<td className="px-1 py-2">{set2A}</td>) : null}
@@ -95,7 +95,7 @@ const MatchCard = ({ match, admin }) => {
               </tr>
               <tr className="border-t border-gray-200">
                 <td className="px-4 py-2 font-semibold">{player2}</td>
-                {status === 'completed' ? null : (<td className="px-1 py-2">{points[gameB]}</td>)}
+                <td className="px-1 py-2">{points[gameB]}</td>
                 <td className="px-1 py-2">{set1B}</td>
                 {(tiebreak1A+tiebreak1B)>0 ? (<td className="px-1 py-2">({tiebreak1B})</td>) : null}
                 {(set2A+set2B)>0 ? (<td className="px-1 py-2">{set2B}</td>) : null}
