@@ -84,7 +84,7 @@ const MatchCard = ({ match, admin }) => {
           <tbody>
               <tr className="border-t border-gray-200">
                 <td className="px-4 py-2 font-semibold">{player1}</td>
-                <td className="px-1 py-2">{points[gameA]}</td>
+                {status === 'in progress' ? (<td className="px-1 py-2">{points[gameA]}</td>) : null}
                 <td className="px-1 py-2">{set1A}</td>
                 {(tiebreak1A+tiebreak1B)>0 ? (<td className="px-1 py-2">({tiebreak1A})</td>) : null}
                 {(set2A+set2B)>0 ? (<td className="px-1 py-2">{set2A}</td>) : null}
@@ -95,7 +95,7 @@ const MatchCard = ({ match, admin }) => {
               </tr>
               <tr className="border-t border-gray-200">
                 <td className="px-4 py-2 font-semibold">{player2}</td>
-                <td className="px-1 py-2">{points[gameB]}</td>
+                {status === 'in progress'  ? (<td className="px-1 py-2">{points[gameB]}</td>) : null}
                 <td className="px-1 py-2">{set1B}</td>
                 {(tiebreak1A+tiebreak1B)>0 ? (<td className="px-1 py-2">({tiebreak1B})</td>) : null}
                 {(set2A+set2B)>0 ? (<td className="px-1 py-2">{set2B}</td>) : null}

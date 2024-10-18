@@ -60,6 +60,10 @@ const MatchDetails = ({ match }) => {
   const handleBackClick = () => {
     router.push('/matches');
   };
+  // const handleUndo = () => {
+  //   var lastScore = JSON.parse(localStorage.getItem('lastScore'))
+  //   updateView(lastScore);
+  // };
 
   const handleAddPoint = (player) => {
     var match_data = {
@@ -75,6 +79,7 @@ const MatchDetails = ({ match }) => {
       supertiebreak: [supertieA, supertieB]
 
     }
+    // localStorage.setItem('lastScore', JSON.stringify(match_data))
     if (player === 'player1') {
       const updated_match = addPoint1(match_data)
       updateView(updated_match)
