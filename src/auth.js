@@ -10,7 +10,7 @@ export const authOptions= {
           type: 'password',
         },
       },
-      async authorize(credentials, _request) {
+      async authorize(credentials) {
         if (credentials?.password == process.env.MATCH_PASSWORD) {
           return { id: '0' };
         } else {

@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic'
 
-export async function POST(req, res) {
+export async function POST(req) {
     const msg = await req.json()
     await connectDB();
     const message = await Message.create(msg)
