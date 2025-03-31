@@ -30,7 +30,19 @@ const MatchDetails = ({ match }) => {
   const [tiebreak3B, setTiebreak3B] = useState(match.tiebreak3[1]);
   const [supertieA, setSupertieA] = useState(match.supertiebreak[0]);
   const [supertieB, setSupertieB] = useState(match.supertiebreak[1]);
-  const [history, setHistory] = useState([]);
+  // Initialize history with the initial match state
+  const [history, setHistory] = useState([{
+    status: match.status,
+    matchFormat: match.matchFormat,
+    game: [...match.game],
+    set1: [...match.set1],
+    set2: [...match.set2],
+    set3: [...match.set3],
+    tiebreak1: [...match.tiebreak1],
+    tiebreak2: [...match.tiebreak2],
+    tiebreak3: [...match.tiebreak3],
+    supertiebreak: [...match.supertiebreak]
+  }]);
 
   const updateView = (match) => {
     setStatus(match.status);
@@ -68,7 +80,8 @@ const MatchDetails = ({ match }) => {
   };
 
   const handleAddPoint = (player) => {
-    var match_data = {
+    // Create current state object
+    var current_state = {
       status: status,
       matchFormat: match.matchFormat,
       game: [gameA, gameB],
@@ -81,26 +94,43 @@ const MatchDetails = ({ match }) => {
       supertiebreak: [supertieA, supertieB]
     };
 
-    setHistory(prev => [...prev, match_data]);
-
+    let updated_match;
     if (player === 'player1') {
-      const updated_match = addPoint1(match_data);
-      updateView(updated_match);
-      updateMatch(updated_match, match._id);
+      updated_match = addPoint1(current_state);
     } else if (player === 'player2') {
-      const updated_match = addPoint2(match_data);
-      updateView(updated_match);
-      updateMatch(updated_match, match._id);
+      updated_match = addPoint2(current_state);
     }
+    
+    // Update the view with the new state
+    updateView(updated_match);
+    updateMatch(updated_match, match._id);
+    
+    // Add the new state to history AFTER applying the point
+    // This ensures we're saving the state AFTER the point is added
+    setHistory(prev => [...prev, {
+      status: updated_match.status,
+      matchFormat: updated_match.matchFormat,
+      game: [...updated_match.game],
+      set1: [...updated_match.set1],
+      set2: [...updated_match.set2],
+      set3: [...updated_match.set3],
+      tiebreak1: [...updated_match.tiebreak1],
+      tiebreak2: [...updated_match.tiebreak2],
+      tiebreak3: [...updated_match.tiebreak3],
+      supertiebreak: [...updated_match.supertiebreak]
+    }]);
   };
 
   const handleUndo = () => {
-    if (history.length > 0) {
-      // Get the last state from history
-      const previousState = history[history.length - 1];
+    if (history.length > 1) {
+      // Remove the current state from history
+      const newHistory = [...history.slice(0, -1)];
       
-      // Remove the last state from history
-      setHistory(prev => prev.slice(0, -1));
+      // Get the previous state (which is now the last item in the new history)
+      const previousState = newHistory[newHistory.length - 1];
+      
+      // Update the history state
+      setHistory(newHistory);
       
       // Apply the previous state
       updateView(previousState);
