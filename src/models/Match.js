@@ -66,6 +66,16 @@ const matchSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  serving: {
+    type: Number,  // 0 for player1, 1 for player2
+    default: 0,    // Default to player1 serving first
+    required: true,
+  },
+  initialServer: {
+    type: Number,  // 0 for player1, 1 for player2
+    default: 0,    // Track who served first in the match
+    required: true,
+  },
 });
 
 export default mongoose.models.Match || mongoose.model('Match', matchSchema);

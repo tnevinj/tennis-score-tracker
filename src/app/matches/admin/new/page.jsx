@@ -24,6 +24,8 @@ const NewMatch = () => {
       tournament: '',
       matchFormat: 'best-of-3',
       status: 'upcoming',
+      serving: 0,
+      initialServer: 0,
     },
   });
 
@@ -105,6 +107,26 @@ const NewMatch = () => {
                 <SelectItem value="best-of-3">Best of 3 Full Sets</SelectItem>
                 <SelectItem value="supertiebreak">Best of 2 + Supertiebreak</SelectItem>
                 <SelectItem value="short-deuce">Best of 2 + Supertiebreak (Short Deuce)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          
+          <div className="grid w-full items-center gap-1.5">
+            <Label htmlFor="initialServer">First Server</Label>
+            <Select
+              defaultValue={form.getValues('serving')}
+              onValueChange={(value) => {
+                const numValue = parseInt(value);
+                form.setValue('serving', numValue);
+                form.setValue('initialServer', numValue);
+              }}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Select first server" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="0">Player 1</SelectItem>
+                <SelectItem value="1">Player 2</SelectItem>
               </SelectContent>
             </Select>
           </div>

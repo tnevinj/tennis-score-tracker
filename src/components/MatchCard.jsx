@@ -43,6 +43,7 @@ const MatchCard = ({ match, admin }) => {
   const [tiebreak3B, setTiebreak3B] = useState(match.tiebreak3[1]);
   const [supertieA, setSupertieA] = useState(match.supertiebreak[0]);
   const [supertieB, setSupertieB] = useState(match.supertiebreak[1]);
+  const [serving, setServing] = useState(match.serving || 0);
 
   const updateView = (match) => {
     setStatus(match.status);
@@ -62,6 +63,7 @@ const MatchCard = ({ match, admin }) => {
     setTiebreak3B(match.tiebreak3[1]);
     setSupertieA(match.supertiebreak[0]);
     setSupertieB(match.supertiebreak[1]);
+    setServing(match.serving !== undefined ? match.serving : 0);
   };
 
   useEffect(() => {
@@ -112,7 +114,9 @@ const MatchCard = ({ match, admin }) => {
         <Table>
           <TableBody>
             <TableRow>
-              <TableCell className="font-medium">{player1}</TableCell>
+              <TableCell className="font-medium">
+                {player1} {status === 'in-progress' && serving === 0 && <span className="text-xs ml-1">🎾</span>}
+              </TableCell>
               {status === 'in-progress' && (
                 <TableCell className="text-center">{points[gameA]}</TableCell>
               )}
@@ -137,7 +141,9 @@ const MatchCard = ({ match, admin }) => {
               )}
             </TableRow>
             <TableRow>
-              <TableCell className="font-medium">{player2}</TableCell>
+              <TableCell className="font-medium">
+                {player2} {status === 'in-progress' && serving === 1 && <span className="text-xs ml-1">🎾</span>}
+              </TableCell>
               {status === 'in-progress' && (
                 <TableCell className="text-center">{points[gameB]}</TableCell>
               )}

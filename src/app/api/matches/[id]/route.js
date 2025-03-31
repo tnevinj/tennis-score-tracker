@@ -25,7 +25,8 @@ export async function PUT(req, { params }) {
     tiebreak1: updated_match.tiebreak1,
     tiebreak2: updated_match.tiebreak2,
     tiebreak3: updated_match.tiebreak3,
-    supertiebreak: updated_match.supertiebreak
+    supertiebreak: updated_match.supertiebreak,
+    serving: updated_match.serving
   });
 
   return NextResponse.json({ match })

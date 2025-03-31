@@ -1,4 +1,48 @@
 
+// Helper functions for serve tracking
+const updateServe = (match, gameCompleted) => {
+  // Only switch serve when a game is completed
+  if (gameCompleted) {
+    match.serving = match.serving === 0 ? 1 : 0;
+  }
+  
+  // Special case for tiebreaks (serve switches after first point, then every 2 points)
+  if (isTiebreakActive(match)) {
+    // For the first point of a tiebreak
+    if (getTiebreakScore(match) === 0) {
+      // Initial server in tiebreak is the player who would normally receive
+      match.serving = match.serving === 0 ? 1 : 0;
+    } 
+    // After first point, switch every 2 points
+    else if (getTiebreakScore(match) % 2 === 1) {
+      match.serving = match.serving === 0 ? 1 : 0;
+    }
+  }
+  
+  return match;
+};
+
+const isTiebreakActive = (match) => {
+  const currentSet = getCurrentSet(match);
+  if (currentSet === 1) return match.set1[0] === 6 && match.set1[1] === 6;
+  if (currentSet === 2) return match.set2[0] === 6 && match.set2[1] === 6;
+  if (currentSet === 3) return match.set3[0] === 6 && match.set3[1] === 6;
+  return false;
+};
+
+const getTiebreakScore = (match) => {
+  const currentSet = getCurrentSet(match);
+  if (currentSet === 1) return match.tiebreak1[0] + match.tiebreak1[1];
+  if (currentSet === 2) return match.tiebreak2[0] + match.tiebreak2[1];
+  if (currentSet === 3) return match.tiebreak3[0] + match.tiebreak3[1];
+  return 0;
+};
+
+const getCurrentSet = (match) => {
+  const match_status = sets_status(match.set1, match.set2, match.set3, match.supertiebreak);
+  return set_count(match_status);
+};
+
 const set_check = (set) => {
     var set_status = [false, false]
     if (set[0]>6 || (set[0]>5 && set[1]<5)) {
@@ -68,15 +112,19 @@ export const addPoint1 = (match) => {
         } else {
             match.game[0] = match.game[0] + 1
             if (match.game[0] > 3 && (match.game[0]-match.game[1]) > 1) {
+                const gameCompleted = true;
                 match.game = [0, 0]
                 match.set1[0] = match.set1[0] + 1
+                match = updateServe(match, gameCompleted);
             }
             if (match.game[0] === 4 && match.game[1] === 4) {
                 match.game = [3, 3]
             }
             if (match.game[0] > 3 && match.matchFormat === 'short-deuce') {
+                const gameCompleted = true;
                 match.game = [0, 0]
                 match.set1[0] = match.set1[0] + 1
+                match = updateServe(match, gameCompleted);
             }
         }
     }
@@ -92,15 +140,19 @@ export const addPoint1 = (match) => {
         } else {
             match.game[0] = match.game[0] + 1
             if (match.game[0] > 3 && (match.game[0]-match.game[1]) > 1) {
+                const gameCompleted = true;
                 match.game = [0, 0]
                 match.set2[0] = match.set2[0] + 1
+                match = updateServe(match, gameCompleted);
             }
             if (match.game[0] === 4 && match.game[1] === 4) {
                 match.game = [3, 3]
             }
             if (match.game[0] > 3 && match.matchFormat === 'short-deuce') {
+                const gameCompleted = true;
                 match.game = [0, 0]
                 match.set2[0] = match.set2[0] + 1
+                match = updateServe(match, gameCompleted);
             }
         }
     }
@@ -116,15 +168,19 @@ export const addPoint1 = (match) => {
         } else {
             match.game[0] = match.game[0] + 1
             if (match.game[0] > 3 && (match.game[0]-match.game[1]) > 1) {
+                const gameCompleted = true;
                 match.game = [0, 0]
                 match.set3[0] = match.set3[0] + 1
+                match = updateServe(match, gameCompleted);
             }
             if (match.game[0] === 4 && match.game[1] === 4) {
                 match.game = [3, 3]
             }
             if (match.game[0] > 3 && match.matchFormat === 'short-deuce') {
+                const gameCompleted = true;
                 match.game = [0, 0]
                 match.set3[0] = match.set3[0] + 1
+                match = updateServe(match, gameCompleted);
             }
         }
     }
@@ -169,15 +225,19 @@ export const addPoint2 = (match) => {
         } else {
             match.game[1] = match.game[1] + 1
             if (match.game[1] > 3 && (match.game[1]-match.game[0]) > 1) {
+                const gameCompleted = true;
                 match.game = [0, 0]
                 match.set1[1] = match.set1[1] + 1
+                match = updateServe(match, gameCompleted);
             }
             if (match.game[0] === 4 && match.game[1] === 4) {
                 match.game = [3, 3]
             }
             if (match.game[1] > 3 && match.matchFormat === 'short-deuce') {
+                const gameCompleted = true;
                 match.game = [0, 0]
                 match.set1[1] = match.set1[1] + 1
+                match = updateServe(match, gameCompleted);
             }
         }
     }
@@ -193,15 +253,19 @@ export const addPoint2 = (match) => {
         } else {
             match.game[1] = match.game[1] + 1
             if (match.game[1] > 3 && (match.game[1]-match.game[0]) > 1) {
+                const gameCompleted = true;
                 match.game = [0, 0]
                 match.set2[1] = match.set2[1] + 1
+                match = updateServe(match, gameCompleted);
             }
             if (match.game[0] === 4 && match.game[1] === 4) {
                 match.game = [3, 3]
             }
             if (match.game[1] > 3 && match.matchFormat === 'short-deuce') {
+                const gameCompleted = true;
                 match.game = [0, 0]
                 match.set2[1] = match.set2[1] + 1
+                match = updateServe(match, gameCompleted);
             }
         }
     }
@@ -217,15 +281,19 @@ export const addPoint2 = (match) => {
         } else {
             match.game[1] = match.game[1] + 1
             if (match.game[1] > 3 && (match.game[1]-match.game[0]) > 1) {
+                const gameCompleted = true;
                 match.game = [0, 0]
                 match.set3[1] = match.set3[1] + 1
+                match = updateServe(match, gameCompleted);
             }
             if (match.game[0] === 4 && match.game[1] === 4) {
                 match.game = [3, 3]
             }
             if (match.game[1] > 3 && match.matchFormat === 'short-deuce') {
+                const gameCompleted = true;
                 match.game = [0, 0]
                 match.set3[1] = match.set3[1] + 1
+                match = updateServe(match, gameCompleted);
             }
         }
     }

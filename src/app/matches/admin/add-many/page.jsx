@@ -24,7 +24,9 @@ const AddMultipleMatches = () => {
       player2: '',
       tournament: '',
       matchFormat: 'best-of-3',
-      status: 'upcoming'
+      status: 'upcoming',
+      serving: 0,
+      initialServer: 0
     }
   ]);
   
@@ -38,7 +40,9 @@ const AddMultipleMatches = () => {
         player2: '',
         tournament: matches[matches.length - 1].tournament, // Copy tournament from last match
         matchFormat: matches[matches.length - 1].matchFormat, // Copy format from last match
-        status: 'upcoming'
+        status: 'upcoming',
+        serving: matches[matches.length - 1].serving, // Copy serving from last match
+        initialServer: matches[matches.length - 1].initialServer // Copy initialServer from last match
       }
     ]);
   };
@@ -99,7 +103,9 @@ const AddMultipleMatches = () => {
             player2: match.player2,
             tournament: match.tournament,
             matchFormat: match.matchFormat,
-            status: match.status
+            status: match.status,
+            serving: match.serving,
+            initialServer: match.initialServer
           }),
         })
       );
@@ -142,7 +148,7 @@ const AddMultipleMatches = () => {
             
             <form onSubmit={handleSubmit}>
               {/* Tournament field for all matches */}
-              <div className="grid gap-6 mb-6 md:grid-cols-2">
+              <div className="grid gap-6 mb-6 md:grid-cols-3">
                 <div>
                   <Label htmlFor="tournament" className="text-lg font-medium">Tournament Name</Label>
                   <Input
@@ -168,6 +174,30 @@ const AddMultipleMatches = () => {
                       <SelectItem value="best-of-3">Best of 3 Full Sets</SelectItem>
                       <SelectItem value="supertiebreak">Best of 2 + Supertiebreak</SelectItem>
                       <SelectItem value="short-deuce">Best of 2 + Supertiebreak (Short Deuce)</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                
+                <div>
+                  <Label htmlFor="initialServer" className="text-lg font-medium">First Server</Label>
+                  <Select
+                    value={matches[0].serving.toString()}
+                    onValueChange={(value) => {
+                      const numValue = parseInt(value);
+                      // Update serving and initialServer for all matches
+                      setMatches(matches.map(match => ({ 
+                        ...match, 
+                        serving: numValue,
+                        initialServer: numValue
+                      })));
+                    }}
+                  >
+                    <SelectTrigger className="mt-2">
+                      <SelectValue placeholder="Select first server" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="0">Player 1</SelectItem>
+                      <SelectItem value="1">Player 2</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

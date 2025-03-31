@@ -30,6 +30,7 @@ const MatchDetails = ({ match }) => {
   const [tiebreak3B, setTiebreak3B] = useState(match.tiebreak3[1]);
   const [supertieA, setSupertieA] = useState(match.supertiebreak[0]);
   const [supertieB, setSupertieB] = useState(match.supertiebreak[1]);
+  const [serving, setServing] = useState(match.serving || 0);
   // Initialize history with the initial match state
   const [history, setHistory] = useState([{
     status: match.status,
@@ -41,7 +42,8 @@ const MatchDetails = ({ match }) => {
     tiebreak1: [...match.tiebreak1],
     tiebreak2: [...match.tiebreak2],
     tiebreak3: [...match.tiebreak3],
-    supertiebreak: [...match.supertiebreak]
+    supertiebreak: [...match.supertiebreak],
+    serving: match.serving || 0
   }]);
 
   const updateView = (match) => {
@@ -62,6 +64,7 @@ const MatchDetails = ({ match }) => {
     setTiebreak3B(match.tiebreak3[1]);
     setSupertieA(match.supertiebreak[0]);
     setSupertieB(match.supertiebreak[1]);
+    setServing(match.serving !== undefined ? match.serving : 0);
   };
 
   const updateMatch = (updated_match, id) => {
@@ -91,7 +94,8 @@ const MatchDetails = ({ match }) => {
       tiebreak1: [tiebreak1A, tiebreak1B],
       tiebreak2: [tiebreak2A, tiebreak2B],
       tiebreak3: [tiebreak3A, tiebreak3B],
-      supertiebreak: [supertieA, supertieB]
+      supertiebreak: [supertieA, supertieB],
+      serving: serving
     };
 
     let updated_match;
@@ -198,8 +202,12 @@ const MatchDetails = ({ match }) => {
             <TableHeader>
               <TableRow>
                 <TableHead></TableHead>
-                <TableHead className="text-center">{match.player1}</TableHead>
-                <TableHead className="text-center">{match.player2}</TableHead>
+                <TableHead className="text-center">
+                  {match.player1} {serving === 0 && <span className="text-xs ml-1">🎾</span>}
+                </TableHead>
+                <TableHead className="text-center">
+                  {match.player2} {serving === 1 && <span className="text-xs ml-1">🎾</span>}
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -243,15 +251,51 @@ const MatchDetails = ({ match }) => {
             </TableBody>
           </Table>
         </div>
-        <Button
-          variant="outline"
-          onClick={handleUndo}
-          disabled={history.length === 0}
-          className="mb-4"
-        >
-          <RotateCcw className="mr-2 h-4 w-4" />
-          Undo Last Point
-        </Button>
+        <div className="flex space-x-2">
+          <Button
+            variant="outline"
+            onClick={handleUndo}
+            disabled={history.length <= 1}
+            className="mb-4"
+          >
+            <RotateCcw className="mr-2 h-4 w-4" />
+            Undo Last Point
+          </Button>
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => {
+              const newServing = serving === 0 ? 1 : 0;
+              setServing(newServing);
+              
+              // Update the match data
+              const updated_match = {
+                status: status,
+                matchFormat: match.matchFormat,
+                game: [gameA, gameB],
+                set1: [set1A, set1B],
+                set2: [set2A, set2B],
+                set3: [set3A, set3B],
+                tiebreak1: [tiebreak1A, tiebreak1B],
+                tiebreak2: [tiebreak2A, tiebreak2B],
+                tiebreak3: [tiebreak3A, tiebreak3B],
+                supertiebreak: [supertieA, supertieB],
+                serving: newServing
+              };
+              
+              // Update in database
+              updateMatch(updated_match, match._id);
+              
+              // Add to history for undo
+              setHistory(prev => [...prev, updated_match]);
+            }}
+            className="mb-4"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-4 w-4"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4"/><path d="m16 12-4 4-4-4"/></svg>
+            Switch Server
+          </Button>
+        </div>
         <ScoreInput handleAddPoint={handleAddPoint} player1={match.player1} player2={match.player2} />
       </CardContent>
       
