@@ -199,57 +199,63 @@ const MatchDetails = ({ match }) => {
         <div>
           <h3 className="text-xl font-semibold mb-2">Scores</h3>
           <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead></TableHead>
-                <TableHead className="text-center">
-                  {match.player1} {serving === 0 && <span className="text-xs ml-1">🎾</span>}
-                </TableHead>
-                <TableHead className="text-center">
-                  {match.player2} {serving === 1 && <span className="text-xs ml-1">🎾</span>}
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow>
-                <TableCell className="font-medium">Game</TableCell>
-                <TableCell className="text-center font-bold">{points[gameA]}</TableCell>
-                <TableCell className="text-center font-bold">{points[gameB]}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">Set 1</TableCell>
-                <TableCell className="text-center">
-                  {set1A} {tiebreak1A > 0 && <span>({tiebreak1A})</span>}
-                </TableCell>
-                <TableCell className="text-center">
-                  {set1B} {tiebreak1B > 0 && <span>({tiebreak1B})</span>}
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">Set 2</TableCell>
-                <TableCell className="text-center">
-                  {set2A} {tiebreak2A > 0 && <span>({tiebreak2A})</span>}
-                </TableCell>
-                <TableCell className="text-center">
-                  {set2B} {tiebreak2B > 0 && <span>({tiebreak2B})</span>}
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">Set 3</TableCell>
-                <TableCell className="text-center">
-                  {set3A} {tiebreak3A > 0 && <span>({tiebreak3A})</span>}
-                </TableCell>
-                <TableCell className="text-center">
-                  {set3B} {tiebreak3B > 0 && <span>({tiebreak3B})</span>}
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell className="font-medium">Super Tiebreak</TableCell>
+          <TableBody>
+            <TableRow>
+              <TableCell className="font-medium">
+                {match.player1} {status === 'in-progress' && serving === 0 && <span className="text-xs ml-1">🎾</span>}
+              </TableCell>
+              {status === 'in-progress' && (
+                <TableCell className="text-center">{points[gameA]}</TableCell>
+              )}
+              <TableCell className="text-center">{set1A}</TableCell>
+              {(tiebreak1A + tiebreak1B) > 0 && (
+                <TableCell className="text-center">({tiebreak1A})</TableCell>
+              )}
+              {(set2A + set2B) > 0 && (
+                <TableCell className="text-center">{set2A}</TableCell>
+              )}
+              {(tiebreak2A + tiebreak2B) > 0 && (
+                <TableCell className="text-center">({tiebreak2A})</TableCell>
+              )}
+              {(set3A + set3B) > 0 && (
+                <TableCell className="text-center">{set3A}</TableCell>
+              )}
+              {(tiebreak3A + tiebreak3B) > 0 && (
+                <TableCell className="text-center">({tiebreak3A})</TableCell>
+              )}
+              {(supertieA + supertieB) > 0 && (
                 <TableCell className="text-center">{supertieA}</TableCell>
+              )}
+            </TableRow>
+            <TableRow>
+              <TableCell className="font-medium">
+                {match.player2} {status === 'in-progress' && serving === 1 && <span className="text-xs ml-1">🎾</span>}
+              </TableCell>
+              {status === 'in-progress' && (
+                <TableCell className="text-center">{points[gameB]}</TableCell>
+              )}
+              <TableCell className="text-center">{set1B}</TableCell>
+              {(tiebreak1A + tiebreak1B) > 0 && (
+                <TableCell className="text-center">({tiebreak1B})</TableCell>
+              )}
+              {(set2A + set2B) > 0 && (
+                <TableCell className="text-center">{set2B}</TableCell>
+              )}
+              {(tiebreak2A + tiebreak2B) > 0 && (
+                <TableCell className="text-center">({tiebreak2B})</TableCell>
+              )}
+              {(set3A + set3B) > 0 && (
+                <TableCell className="text-center">{set3B}</TableCell>
+              )}
+              {(tiebreak3A + tiebreak3B) > 0 && (
+                <TableCell className="text-center">({tiebreak3B})</TableCell>
+              )}
+              {(supertieA + supertieB) > 0 && (
                 <TableCell className="text-center">{supertieB}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
+              )}
+            </TableRow>
+          </TableBody>
+        </Table>
         </div>
         <div className="flex space-x-2">
           <Button

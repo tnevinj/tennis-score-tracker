@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 export default function Footer() {
   return (
-    <footer className="fixed bottom-0 left-0 right-0 bg-gray-50 border-t border-gray-200 z-10">
+    <footer className="bg-gray-50 border-t border-gray-200 z-10">
       {/* Sponsors Section */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <h2 className="text-xl font-semibold text-center text-gray-900 mb-4">Our Sponsors</h2>
@@ -55,7 +55,7 @@ export default function Footer() {
         
         {/* Copyright Section */}
         <div className="mt-4 pt-4 border-t border-gray-200 text-center text-gray-500 text-sm">
-          <p>&copy; {new Date().getFullYear()} Tennis Score Tracker. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} SOVARI. All rights reserved.</p>
         </div>
       </div>
     </footer>

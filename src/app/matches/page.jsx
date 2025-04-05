@@ -37,10 +37,10 @@ export default function MatchList() {
   ) ?? [];
 
   return (
-    <div>
+    <div className='min-h-screen flex flex-col'>
       <Navbar />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-[300px]">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div className="max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow">
+        <div className="flex flex-row sm:items-center justify-between gap-4 mb-6">
           <h1 className="text-3xl font-bold">Matches</h1>
           <div className="relative w-full sm:w-64">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
