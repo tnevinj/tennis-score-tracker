@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Hero Section */}
-      <main className="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <main className="flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8 flex-grow">
         <div className="max-w-4xl mx-auto text-center">
           <h1 className="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl">
             <span className="text-blue-500">Tennis Score Tracker</span>
