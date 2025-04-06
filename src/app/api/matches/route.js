@@ -8,29 +8,24 @@ export async function GET() {
   await connectDB();
   
   // Fetch all matches
-  const matches = await Match.find({}).sort({ date: -1 });
-  
-  // Reorder matches to prioritize in-progress ones
-  const reorderedMatches = [...matches].sort((a, b) => {
-    // First priority: in progress matches come first
-    if (a.status === 'in progress' && b.status !== 'in progress') {
-      return -1;
-    }
-    if (a.status !== 'in progress' && b.status === 'in progress') {
-      return 1;
-    }
-    
-    // Second priority: completed matches before upcoming ones
-    if (a.status === 'completed' && b.status === 'upcoming') {
-      return -1;
-    }
-    if (a.status === 'upcoming' && b.status === 'completed') {
-      return 1;
-    }
-    
-    // Third priority: maintain date sort for matches of the same status
-    return new Date(b.date) - new Date(a.date);
-  });
+  const matches = await Match.aggregate([
+    {
+      $addFields: {
+        statusOrder: {
+          $switch: {
+            branches: [
+              { case: { $eq: ["$status", "in-progress"] }, then: 1 },
+              { case: { $eq: ["$status", "completed"] }, then: 2 },
+              { case: { $eq: ["$status", "upcoming"] }, then: 3 }
+            ],
+            default: 4
+          }
+        }
+      }
+    },
+    { $sort: { statusOrder: 1 } },
+    { $project: { statusOrder: 0 } } // Remove the helper field
+  ]);
 
-  return NextResponse.json({ matches: reorderedMatches })
+  return NextResponse.json({ matches })
 }
