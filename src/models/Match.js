@@ -76,6 +76,19 @@ const matchSchema = new mongoose.Schema({
     default: 0,    // Track who served first in the match
     required: true,
   },
+  retirement: {
+    type: Boolean,
+    default: false,
+    required: true,
+  },
+  retiredPlayer: {
+    type: Number,  // 0 for player1, 1 for player2, null if no retirement
+    default: null,
+  },
+  retirementReason: {
+    type: String,
+    default: '',
+  },
 });
 
 export default mongoose.models.Match || mongoose.model('Match', matchSchema);

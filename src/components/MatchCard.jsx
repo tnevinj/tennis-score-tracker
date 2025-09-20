@@ -19,6 +19,12 @@ const MatchCard = ({ match, admin }) => {
       },
       body: JSON.stringify(match),
     })
+      .then(response => {
+        if (response.ok) {
+          // Refresh the page to update the matches list
+          window.location.reload();
+        }
+      })
       .catch(error => {
         console.error('Error:', error);
       });
@@ -115,7 +121,9 @@ const MatchCard = ({ match, admin }) => {
           <TableBody>
             <TableRow>
               <TableCell className="font-medium">
-                {player1} {status === 'in-progress' && serving === 0 && <span className="text-xs ml-1">🎾</span>}
+                {player1}
+                {match.retirement && match.retiredPlayer === 0 && ' (ret.)'}
+                {status === 'in-progress' && serving === 0 && <span className="text-xs ml-1">🎾</span>}
               </TableCell>
               {status === 'in-progress' && (
                 <TableCell className="text-center">{points[gameA]}</TableCell>
@@ -142,7 +150,9 @@ const MatchCard = ({ match, admin }) => {
             </TableRow>
             <TableRow>
               <TableCell className="font-medium">
-                {player2} {status === 'in-progress' && serving === 1 && <span className="text-xs ml-1">🎾</span>}
+                {player2}
+                {match.retirement && match.retiredPlayer === 1 && ' (ret.)'}
+                {status === 'in-progress' && serving === 1 && <span className="text-xs ml-1">🎾</span>}
               </TableCell>
               {status === 'in-progress' && (
                 <TableCell className="text-center">{points[gameB]}</TableCell>

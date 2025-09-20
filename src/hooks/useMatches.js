@@ -9,7 +9,7 @@ function useMatches () {
   return {
     matches: data,
     isLoading,
-    error: error
+    error: error ? error.message : null
   }
 }
 

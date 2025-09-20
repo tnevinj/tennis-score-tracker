@@ -1,12 +1,12 @@
 import { useRouter } from 'next/navigation';
 import ScoreInput from './ScoreInput';
 import { useState } from 'react';
-import { addPoint1, addPoint2 } from '@/lib/addPoint';
+import { addPoint1, addPoint2, retirePlayer1, retirePlayer2 } from '@/lib/addPoint';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, RotateCcw, Trophy, PauseCircle, Clock } from 'lucide-react';
+import { ArrowLeft, RotateCcw, Trophy, PauseCircle, Clock, AlertTriangle } from 'lucide-react';
 
 const MatchDetails = ({ match }) => {
   const router = useRouter();
@@ -45,6 +45,10 @@ const MatchDetails = ({ match }) => {
     supertiebreak: [...match.supertiebreak],
     serving: match.serving || 0
   }]);
+
+  const [showRetireConfirm, setShowRetireConfirm] = useState(false);
+  const [playerToRetire, setPlayerToRetire] = useState(null);
+  const [retirementReason, setRetirementReason] = useState('');
 
   const updateView = (match) => {
     setStatus(match.status);
@@ -125,8 +129,56 @@ const MatchDetails = ({ match }) => {
     }]);
   };
 
+  const handleRetire = (player) => {
+    // Create current state object
+    var current_state = {
+      status: status,
+      matchFormat: match.matchFormat,
+      game: [gameA, gameB],
+      set1: [set1A, set1B],
+      set2: [set2A, set2B],
+      set3: [set3A, set3B],
+      tiebreak1: [tiebreak1A, tiebreak1B],
+      tiebreak2: [tiebreak2A, tiebreak2B],
+      tiebreak3: [tiebreak3A, tiebreak3B],
+      supertiebreak: [supertieA, supertieB],
+      serving: serving,
+      retirement: match.retirement || false,
+      retiredPlayer: match.retiredPlayer || null,
+      retirementReason: match.retirementReason || ''
+    };
+
+    let updated_match;
+    if (player === 'player1') {
+      updated_match = retirePlayer1(current_state);
+    } else if (player === 'player2') {
+      updated_match = retirePlayer2(current_state);
+    }
+    
+    // Update the view with the new state
+    updateView(updated_match);
+    updateMatch(updated_match, match._id);
+    
+    // Add the new state to history AFTER applying retirement
+    setHistory(prev => [...prev, {
+      status: updated_match.status,
+      matchFormat: updated_match.matchFormat,
+      game: [...updated_match.game],
+      set1: [...updated_match.set1],
+      set2: [...updated_match.set2],
+      set3: [...updated_match.set3],
+      tiebreak1: [...updated_match.tiebreak1],
+      tiebreak2: [...updated_match.tiebreak2],
+      tiebreak3: [...updated_match.tiebreak3],
+      supertiebreak: [...updated_match.supertiebreak],
+      retirement: updated_match.retirement,
+      retiredPlayer: updated_match.retiredPlayer,
+      retirementReason: updated_match.retirementReason
+    }]);
+  };
+
   const handleUndo = () => {
-    if (history.length > 1) {
+    if (history.length > 1 && status !== 'completed') {
       // Remove the current state from history
       const newHistory = [...history.slice(0, -1)];
       
@@ -172,6 +224,31 @@ const MatchDetails = ({ match }) => {
           </Badge>
         );
     }
+  };
+
+  // Add retirement status to the display if match ended via retirement
+  const getRetirementStatus = () => {
+    if (match.retirement) {
+      const retiredPlayer = match.retiredPlayer === 0 ? match.player1 : match.player2;
+      const winningPlayer = match.retiredPlayer === 0 ? match.player2 : match.player1;
+      return (
+        <div className="mt-2 p-3 bg-destructive/10 border border-destructive/20 rounded-md">
+          <p className="text-destructive font-medium">
+            <AlertTriangle className="inline h-4 w-4 mr-2" />
+            Match ended by retirement - {retiredPlayer} retired
+          </p>
+          <p className="text-sm text-muted-foreground mt-1">
+            {winningPlayer} wins by retirement
+          </p>
+          {match.retirementReason && (
+            <p className="text-sm text-muted-foreground mt-1">
+              Reason: {match.retirementReason}
+            </p>
+          )}
+        </div>
+      );
+    }
+    return null;
   };
 
   // Format the date
@@ -272,37 +349,138 @@ const MatchDetails = ({ match }) => {
             variant="outline"
             size="sm"
             onClick={() => {
-              const newServing = serving === 0 ? 1 : 0;
-              setServing(newServing);
-              
-              // Update the match data
-              const updated_match = {
-                status: status,
-                matchFormat: match.matchFormat,
-                game: [gameA, gameB],
-                set1: [set1A, set1B],
-                set2: [set2A, set2B],
-                set3: [set3A, set3B],
-                tiebreak1: [tiebreak1A, tiebreak1B],
-                tiebreak2: [tiebreak2A, tiebreak2B],
-                tiebreak3: [tiebreak3A, tiebreak3B],
-                supertiebreak: [supertieA, supertieB],
-                serving: newServing
-              };
-              
-              // Update in database
-              updateMatch(updated_match, match._id);
-              
-              // Add to history for undo
-              setHistory(prev => [...prev, updated_match]);
+              if (status !== 'completed') {
+                const newServing = serving === 0 ? 1 : 0;
+                setServing(newServing);
+                
+                // Update the match data
+                const updated_match = {
+                  status: status,
+                  matchFormat: match.matchFormat,
+                  game: [gameA, gameB],
+                  set1: [set1A, set1B],
+                  set2: [set2A, set2B],
+                  set3: [set3A, set3B],
+                  tiebreak1: [tiebreak1A, tiebreak1B],
+                  tiebreak2: [tiebreak2A, tiebreak2B],
+                  tiebreak3: [tiebreak3A, tiebreak3B],
+                  supertiebreak: [supertieA, supertieB],
+                  serving: newServing
+                };
+                
+                // Update in database
+                updateMatch(updated_match, match._id);
+                
+                // Add to history for undo
+                setHistory(prev => [...prev, updated_match]);
+              }
             }}
+            disabled={status === 'completed'}
             className="mb-4"
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2 h-4 w-4"><circle cx="12" cy="12" r="10"/><path d="m16 12-4-4-4 4"/><path d="m16 12-4 4-4-4"/></svg>
             Switch Server
           </Button>
+
+          {status === 'in-progress' && (
+            <>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setPlayerToRetire('player1');
+                  setShowRetireConfirm(true);
+                }}
+                className="mb-4"
+              >
+                <AlertTriangle className="mr-2 h-4 w-4" />
+                {match.player1} Retire
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setPlayerToRetire('player2');
+                  setShowRetireConfirm(true);
+                }}
+                className="mb-4"
+              >
+                <AlertTriangle className="mr-2 h-4 w-4" />
+                {match.player2} Retire
+              </Button>
+            </>
+          )}
         </div>
-        <ScoreInput handleAddPoint={handleAddPoint} player1={match.player1} player2={match.player2} />
+        {getRetirementStatus()}
+        
+        {/* Retirement Confirmation Modal */}
+        {showRetireConfirm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4">
+              <h3 className="text-lg font-semibold mb-4">
+                Confirm Retirement
+              </h3>
+              <p className="mb-4">
+                Are you sure you want to mark {playerToRetire === 'player1' ? match.player1 : match.player2} as retired?
+                This action cannot be undone.
+              </p>
+              
+              <div className="mb-4">
+                <label className="block text-sm font-medium mb-2">
+                  Reason (optional):
+                </label>
+                <input
+                  type="text"
+                  value={retirementReason}
+                  onChange={(e) => setRetirementReason(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  placeholder="Enter reason for retirement"
+                />
+              </div>
+              
+              <div className="flex space-x-4 justify-end">
+                <Button
+                  variant="outline"
+                  onClick={() => {
+                    setShowRetireConfirm(false);
+                    setPlayerToRetire(null);
+                    setRetirementReason('');
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="destructive"
+                  onClick={() => {
+                    // Update match with retirement reason
+                    const updatedMatch = {
+                      ...match,
+                      retirementReason: retirementReason
+                    };
+                    
+                    // Call the retire function
+                    handleRetire(playerToRetire);
+                    
+                    // Close the modal and reset state
+                    setShowRetireConfirm(false);
+                    setPlayerToRetire(null);
+                    setRetirementReason('');
+                  }}
+                >
+                  Confirm Retirement
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <ScoreInput 
+          handleAddPoint={handleAddPoint} 
+          player1={match.player1} 
+          player2={match.player2} 
+          status={status}
+        />
       </CardContent>
       
       <CardFooter>

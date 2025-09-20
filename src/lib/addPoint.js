@@ -85,6 +85,25 @@ const sets_status = (set1, set2, set3, supertiebreak) => {
     return sets.concat(set_check(set1), set_check(set2), set_check(set3), supertie_check(supertiebreak))
 }
 
+// Retirement functions - Preserve actual scores, only mark retirement status
+export const retirePlayer1 = (match) => {
+  match.status = 'completed';
+  match.retirement = true;
+  match.retiredPlayer = 0;
+  // Reset current game to 0-0 when match ends via retirement
+  match.game = [0, 0];
+  return match;
+};
+
+export const retirePlayer2 = (match) => {
+  match.status = 'completed';
+  match.retirement = true;
+  match.retiredPlayer = 1;
+  // Reset current game to 0-0 when match ends via retirement
+  match.game = [0, 0];
+  return match;
+};
+
 export const addPoint1 = (match) => {
     match.status = 'in-progress'
     var match_status = sets_status(match.set1, match.set2, match.set3, match.supertiebreak)

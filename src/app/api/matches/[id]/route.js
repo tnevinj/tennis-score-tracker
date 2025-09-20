@@ -26,7 +26,10 @@ export async function PUT(req, { params }) {
     tiebreak2: updated_match.tiebreak2,
     tiebreak3: updated_match.tiebreak3,
     supertiebreak: updated_match.supertiebreak,
-    serving: updated_match.serving
+    serving: updated_match.serving,
+    retirement: updated_match.retirement,
+    retiredPlayer: updated_match.retiredPlayer,
+    retirementReason: updated_match.retirementReason
   });
 
   return NextResponse.json({ match })
@@ -37,5 +40,5 @@ export async function DELETE(request, { params }) {
   const { id } = await params;
   await Match.findOneAndDelete({ _id: id });
 
-  return NextResponse.redirect('/matches/admin')
+  return NextResponse.json({ success: true })
 }

@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { PlusCircle, RotateCcw } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-const ScoreInput = ({ player1, player2, handleAddPoint, handleUndo }) => {
+const ScoreInput = ({ player1, player2, handleAddPoint, handleUndo, status }) => {
   return (
     <Card className="mt-4">
       <CardHeader className="pb-3">
@@ -14,6 +14,7 @@ const ScoreInput = ({ player1, player2, handleAddPoint, handleUndo }) => {
             size="lg" 
             className="h-16 text-md"
             onClick={() => handleAddPoint('player1')}
+            disabled={status === 'completed'}
           >
             <PlusCircle className="mr-2 h-4 w-4" />
             Point for {player1}
@@ -23,11 +24,13 @@ const ScoreInput = ({ player1, player2, handleAddPoint, handleUndo }) => {
             size="lg" 
             className="h-16 text-md"
             onClick={() => handleAddPoint('player2')}
+            disabled={status === 'completed'}
           >
             <PlusCircle className="mr-2 h-4 w-4" />
             Point for {player2}
           </Button>
         </div>
+        
       </CardContent>
     </Card>
   );
