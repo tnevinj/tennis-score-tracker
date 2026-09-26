@@ -179,4 +179,4 @@ git diff --stat main -- src/ ':!src/**/*.test.js'
 - **Mutation check:** three deliberate breakages of `addPoint.js` were each caught by exactly one test (no-ad threshold, deuce reset, tiebreak win-by-two). The file was restored with `git checkout` after each.
 - Both `it.fails` tests were first run as plain `it` and failed only on the `serving` assertion, with their setup checks passing: `expected +0 to be 1` and `expected 1 to be +0`.
 - `npm run lint`: no warnings or errors. No `src/` file changed except the two new test files.
-- Vitest resolved to `^5.0.2`.
+- Vitest pinned to `^4.1.11`. v5 (first installed) needs `@types/node` ≥ 22, and the project pins `^20`. `npm install` accepted that, but `npm ci` fails with ERESOLVE. Caught while merging into `main`. Verified: `npm ci` from clean, tests, lint and `npm run build` all pass on the merged `main` (with upstream `next` 15.2.8).
